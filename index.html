@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kurra Sai Veda Swaroop — iOS Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0d0905;
+    --surface:  #151009;
+    --surface2: #1c1510;
+    --border:   #2a1f15;
+    --accent:   #C4622D;
+    --gold:     #E8A23C;
+    --text:     #F2EBE0;
+    --muted:    #8a7060;
+    --dim:      #3d2e22;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+  }
+
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(196,98,45,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(196,98,45,0.04) 1px, transparent 1px);
+    background-size: 72px 72px;
+    pointer-events: none;
+  }
+
+  .glow {
+    position: fixed;
+    width: 800px; height: 800px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,98,45,0.07) 0%, transparent 65%);
+    top: -300px; right: -300px;
+    pointer-events: none;
+  }
+
+  .glow2 {
+    position: fixed;
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232,162,60,0.04) 0%, transparent 65%);
+    bottom: -200px; left: -200px;
+    pointer-events: none;
+  }
+
+  .container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 48px;
+    position: relative;
+    z-index: 1;
+  }
+
+  nav {
+    padding: 36px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+
+  .nav-links a {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  .hero {
+    padding: 110px 0 80px;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 60px;
+    align-items: end;
+  }
+
+  .hero-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    opacity: 0;
+    animation: rise 0.7s ease 0.1s forwards;
+  }
+
+  .hero-tag::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--accent);
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(52px, 6.5vw, 84px);
+    font-weight: 400;
+    line-height: 1.0;
+    color: var(--text);
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: rise 0.7s ease 0.2s forwards;
+  }
+
+  .hero h1 em { font-style: italic; color: var(--accent); }
+
+  .hero-sub {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(22px, 2.8vw, 38px);
+    font-weight: 400;
+    font-style: italic;
+    color: var(--muted);
+    margin-bottom: 40px;
+    line-height: 1.3;
+    opacity: 0;
+    animation: rise 0.7s ease 0.3s forwards;
+  }
+
+  .hero-desc {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.9;
+    margin-bottom: 44px;
+    max-width: 520px;
+    opacity: 0;
+    animation: rise 0.7s ease 0.4s forwards;
+  }
+
+  .hero-desc strong { color: var(--text); font-weight: 400; }
+
+  .hero-cta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: rise 0.7s ease 0.5s forwards;
+  }
+
+  .hero-right { opacity: 0; animation: rise 0.7s ease 0.4s forwards; }
+
+  .hero-card {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    padding: 32px;
+  }
+
+  .hero-card-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .hero-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-stat-row:last-child { border-bottom: none; }
+  .hero-stat-label { font-size: 12px; color: var(--muted); }
+
+  .hero-stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--accent);
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 13px 26px;
+    text-decoration: none;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary { background: var(--accent); color: var(--bg); font-weight: 500; }
+  .btn-primary:hover { background: #d4703a; transform: translateY(-1px); }
+  .btn-secondary { border: 1px solid var(--border); color: var(--muted); }
+  .btn-secondary:hover { border-color: var(--dim); color: var(--text); }
+
+  .section { padding: 88px 0; border-top: 1px solid var(--border); }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    margin-bottom: 52px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px;
+    font-weight: 400;
+    color: var(--text);
+  }
+
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 1px;
+  }
+
+  .projects-grid-2 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+
+  .project-card {
+    background: var(--bg);
+    padding: 28px 24px;
+    text-decoration: none;
+    display: block;
+    transition: background 0.2s;
+  }
+
+  .project-card:hover { background: var(--surface); }
+  .project-card:hover .proj-arrow { transform: translate(3px, -3px); }
+
+  .proj-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  .proj-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .proj-desc {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .proj-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  .proj-tech {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--dim);
+    line-height: 1.6;
+    max-width: 80%;
+  }
+
+  .proj-arrow {
+    font-size: 14px;
+    color: var(--accent);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .skill-row {
+    background: var(--bg);
+    padding: 18px 24px;
+    display: flex;
+    gap: 20px;
+    align-items: baseline;
+  }
+
+  .skill-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+
+  .skill-value { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 72px;
+  }
+
+  .about-text p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.95;
+    margin-bottom: 18px;
+  }
+
+  .about-text p strong { color: var(--text); font-weight: 400; }
+
+  .about-pull {
+    border-left: 2px solid var(--accent);
+    padding: 4px 0 4px 20px;
+    margin: 28px 0;
+  }
+
+  .about-pull p {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .vanna-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 24px;
+    margin-top: 32px;
+  }
+
+  .vanna-block-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .vanna-block p { font-size: 13px; color: var(--muted); line-height: 1.8; }
+
+  .timeline {}
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tl-year {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    padding-top: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .tl-role { font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .tl-co { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--muted); }
+
+  .contact-section { padding: 80px 0 120px; border-top: 1px solid var(--border); }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .available-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .available-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  .contact-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 4vw, 54px);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .contact-heading em { color: var(--accent); font-style: italic; }
+  .contact-sub { font-size: 14px; color: var(--muted); line-height: 1.8; margin-bottom: 32px; }
+
+  .contact-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 40px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    text-decoration: none;
+    padding: 16px 20px;
+    background: var(--bg);
+    transition: all 0.2s;
+  }
+
+  .contact-link:hover { background: var(--surface); }
+  .contact-link:hover .cl-value { color: var(--text); }
+
+  .cl-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    min-width: 72px;
+  }
+
+  .cl-value { font-size: 13px; color: var(--muted); transition: color 0.2s; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .projects-grid, .projects-grid-2 { grid-template-columns: 1fr 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    .projects-grid, .projects-grid-2 { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    footer { flex-direction: column; gap: 10px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="glow"></div>
+<div class="glow2"></div>
+
+<div class="container">
+
+  <nav>
+    <a href="#" class="nav-logo">SVS · Kurra</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">Senior iOS Engineer · Bengaluru, India</div>
+      <h1>Kurra Sai<br><em>Veda Swaroop</em></h1>
+      <p class="hero-sub">11 years at the edges<br>of the platform.</p>
+      <p class="hero-desc">
+        I build <strong>iOS systems that most engineers haven't needed to build yet</strong> — sensor fusion pipelines, spatial computing apps, offline-first architectures, and hardware-integrated experiences.<br><br>R&D that ships.
+      </p>
+      <div class="hero-cta">
+        <a href="mailto:swaroop.kurra@gmail.com" class="btn btn-primary">Get in touch →</a>
+        <a href="https://www.linkedin.com/in/theesummer" target="_blank" class="btn btn-secondary">LinkedIn ↗</a>
+        <a href="https://github.com/theesummer" target="_blank" class="btn btn-secondary">GitHub ↗</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="hero-card">
+        <div class="hero-card-title">By the numbers</div>
+        <div class="hero-stat-row">
+          <span class="hero-stat-label">Years iOS</span>
+          <span class="hero-stat-value">11</span>
+        </div>
+        <div class="hero-stat-row">
+          <span class="hero-stat-label">Sensor streams</span>
+          <span class="hero-stat-value">7</span>
+        </div>
+        <div class="hero-stat-row">
+          <span class="hero-stat-label">Crash-free rate</span>
+          <span class="hero-stat-value">99.86%</span>
+        </div>
+        <div class="hero-stat-row">
+          <span class="hero-stat-label">User retention</span>
+          <span class="hero-stat-value">80%</span>
+        </div>
+        <div class="hero-stat-row">
+          <span class="hero-stat-label">Apps shipped</span>
+          <span class="hero-stat-value">12+</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="work">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Shipped Products</h2>
+    </div>
+
+    <div class="projects-grid">
+      <a href="https://apps.apple.com/in/app/openair3d/id1595447417" target="_blank" class="project-card">
+        <div class="proj-tag">Spatial Computing · AR · LiDAR</div>
+        <div class="proj-name">Luxolis 3D Scan</div>
+        <div class="proj-desc">LiDAR-based 3D scanning app with a custom 7-stream sensor fusion pipeline. Built by an international R&D team spread across the globe.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">ARKit · LiDAR · AVAssetWriter · ROS · Accelerate vImage</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://apps.apple.com/in/app/alle/id6460892292" target="_blank" class="project-card">
+        <div class="proj-tag">AI · Fashion · eCommerce</div>
+        <div class="proj-name">Alle</div>
+        <div class="proj-desc">AI-driven fashion app with real-time chat, personalised outfit recommendations, and custom in-app observability tooling.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · UIKit · WebSockets · CoreData · async/await</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://apps.apple.com/in/app/telyport/id1437442582" target="_blank" class="project-card">
+        <div class="proj-tag">Hyperlocal · Delivery · Payments</div>
+        <div class="proj-name">Telyport</div>
+        <div class="proj-desc">On-demand delivery platform built from scratch as first engineering hire. In-app wallet, real-time tracking. 80% active user retention.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · CoreData · MapKit · GCD · Offline-first</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://apps.apple.com/in/app/telyport-heroes/id1439629672" target="_blank" class="project-card">
+        <div class="proj-tag">Hyperlocal · Courier</div>
+        <div class="proj-name">Telyport Heroes</div>
+        <div class="proj-desc">Courier-side app for the Telyport platform. Real-time job assignment, live tracking, and in-app payments.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · GCD · WebSockets · Offline-first</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://apps.apple.com/in/app/national-geographic-traveller/id503118162" target="_blank" class="project-card">
+        <div class="proj-tag">Publishing · Digital Media</div>
+        <div class="proj-name">National Geographic Traveller UK</div>
+        <div class="proj-desc">Interactive digital magazines for APL Media's international portfolio — NatGeo, GQ, Cosmopolitan, Men's Health, Women's Health — on a single reusable iOS architecture.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · UIKit · Vuforia AR</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="#" class="project-card">
+        <div class="proj-tag">AR · Government · South Korea</div>
+        <div class="proj-name">Gyeonggi-do Smart Torch Relay</div>
+        <div class="proj-desc">AR torch relay app for the 2022 Gyeonggi-do Sports Festival, commissioned by the regional government. Users ignite and pass a virtual flame between phones.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · ARKit · RealityKit</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="projects-grid-2">
+      <a href="https://apps.apple.com/in/app/nokdok-for-patients/id1099451602" target="_blank" class="project-card">
+        <div class="proj-tag">Healthcare</div>
+        <div class="proj-name">NokDok Patient App</div>
+        <div class="proj-desc">Healthcare platform with appointment scheduling, medical records, and medication reminders. Shipped in full within 2 months.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · REST · UIKit</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://itunes.apple.com/us/app/xintcube/id1166737667" target="_blank" class="project-card">
+        <div class="proj-tag">Sustainability · Fitness</div>
+        <div class="proj-name">WaT — Walk the Talk</div>
+        <div class="proj-desc">Sustainability and fitness app with carbon footprint tracking, eco-challenges, and community engagement.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · CoreMotion · CoreLocation · Firebase</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+
+      <a href="https://apps.apple.com/in/app/songbooks-pro/id1258471051" target="_blank" class="project-card">
+        <div class="proj-tag">Freelance · Music</div>
+        <div class="proj-name">Псалмоспiви — SongBook Pro</div>
+        <div class="proj-desc">Ukrainian songbook with 1000+ songs, dual navigation modes, and personalised favourites. Shipped independently as a freelance project.</div>
+        <div class="proj-footer">
+          <span class="proj-tech">Swift · UIKit · CoreData</span>
+          <span class="proj-arrow">↗</span>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="section reveal" id="stack">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Technical Stack</h2>
+    </div>
+    <div class="skills-grid">
+      <div class="skill-row">
+        <span class="skill-label">Core</span>
+        <span class="skill-value">Swift, UIKit, SwiftUI (with references), Objective-C (reading)</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Architecture</span>
+        <span class="skill-value">Micro-module MVVM, modular iOS, offline-first sync, protocol-oriented design</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Concurrency</span>
+        <span class="skill-value">async/await, Task, GCD, Operation queues, DispatchQueue isolation</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Spatial & CV</span>
+        <span class="skill-value">ARKit, RealityKit, RoomPlan, Object Capture API, OpenCV, Vuforia, simd</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Sensor Pipeline</span>
+        <span class="skill-value">LiDAR (CVPixelBuffer, F32→F16 via Accelerate vImage), CoreMotion, AVAssetWriter, PLY binary</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Networking</span>
+        <span class="skill-value">WebSockets, REST APIs, ROS, background URLSession, Socket.io, RabbitMQ</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Data</span>
+        <span class="skill-value">CoreData, MongoDB, Firebase, Python backend collaboration</span>
+      </div>
+      <div class="skill-row">
+        <span class="skill-label">Tools</span>
+        <span class="skill-value">Xcode, Git, Jira, CocoaPods, Swift Package Manager, Figma, Crashlytics</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="about">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">About</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>I've spent 11 years building iOS systems at the edges of what the platform can do. Much of that time in <strong>R&D environments where figuring it out was part of the job</strong> — international teams, no playbook, problems solved from first principles.</p>
+        <div class="about-pull">
+          <p>"I do my best work when the problem is genuinely hard, the team is close-knit, and what we build actually matters."</p>
+        </div>
+        <p>I design my own architecture — <strong>micro-module MVVM</strong>, self-contained feature units that compose like microservices. I maintain a custom networking library evolved over 7 years from URLSession callbacks to Swift structured concurrency. I reach for custom solutions when off-the-shelf creates more problems than it solves.</p>
+        <p>Open to <strong>Senior iOS Engineer and iOS Lead roles</strong>. Remote or hybrid preferred.</p>
+        <div class="vanna-block">
+          <div class="vanna-block-title">Beyond engineering — VANNA</div>
+          <p>I tried to build VANNA — a marketplace for traditional Andhra handicraft artisans so they could earn sustainable income without abandoning their craft. Kalamkari, Kondapalli Toys, Cherial Scroll Painting. A 70/30 revenue model, artisan-first. It didn't survive the physical infrastructure stage. It's the work I'm most proud of.</p>
+        </div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="tl-year">2024–25</span>
+          <div><div class="tl-role">Founder & Product Architect</div><div class="tl-co">VANNA</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2023–24</span>
+          <div><div class="tl-role">Senior Software Engineer (iOS)</div><div class="tl-co">Styleclay — Alle</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2021–23</span>
+          <div><div class="tl-role">Senior Software Engineer iOS/AR</div><div class="tl-co">Luxolis</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2018–21</span>
+          <div><div class="tl-role">Full Stack Engineer</div><div class="tl-co">Telyport Technologies</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2017–18</span>
+          <div><div class="tl-role">iOS Developer · Freelance</div><div class="tl-co">SongBook Pro</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2017</span>
+          <div><div class="tl-role">iOS Developer</div><div class="tl-co">Biwid — WaT</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2016–17</span>
+          <div><div class="tl-role">Software Engineer (iOS)</div><div class="tl-co">BitGroovy Technologies</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2016</span>
+          <div><div class="tl-role">iOS Developer</div><div class="tl-co">NokDok</div></div>
+        </div>
+        <div class="timeline-item">
+          <span class="tl-year">2014–16</span>
+          <div><div class="tl-role">Software Developer (iOS)</div><div class="tl-co">Pixel Mavericks</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact-section reveal" id="contact">
+    <div class="contact-grid">
+      <div>
+        <div class="available-badge">
+          <span class="available-dot"></span>
+          Available for opportunities
+        </div>
+        <h2 class="contact-heading">Let's build something <em>hard.</em></h2>
+        <p class="contact-sub">Open to Senior iOS Engineer and iOS Lead roles. Remote or hybrid preferred. If you're building something that pushes the platform, I'd love to hear about it.</p>
+        <a href="mailto:swaroop.kurra@gmail.com" class="btn btn-primary">swaroop.kurra@gmail.com →</a>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:swaroop.kurra@gmail.com" class="contact-link">
+          <span class="cl-label">Email</span>
+          <span class="cl-value">swaroop.kurra@gmail.com</span>
+        </a>
+        <a href="tel:+919986049047" class="contact-link">
+          <span class="cl-label">Phone</span>
+          <span class="cl-value">+91 99860 49047</span>
+        </a>
+        <a href="https://www.linkedin.com/in/theesummer" target="_blank" class="contact-link">
+          <span class="cl-label">LinkedIn</span>
+          <span class="cl-value">linkedin.com/in/theesummer</span>
+        </a>
+        <a href="https://github.com/theesummer" target="_blank" class="contact-link">
+          <span class="cl-label">GitHub</span>
+          <span class="cl-value">github.com/theesummer</span>
+        </a>
+        <a href="https://theesummer.github.io" target="_blank" class="contact-link">
+          <span class="cl-label">Portfolio</span>
+          <span class="cl-value">theesummer.github.io</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span class="footer-text">Kurra Sai Veda Swaroop · Senior iOS Engineer · Bengaluru</span>
+    <span class="footer-text">Built with intent. Shipped with care.</span>
+  </footer>
+
+</div>
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+
+</body>
+</html>
